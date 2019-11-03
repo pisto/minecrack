@@ -104,8 +104,8 @@ int main(int argc, char** argv) try {
 	{
 		uint8_t slimechunks_tot = cmdline::chunk_seed_offset.size();
 		set_device_object(slimechunks_tot, GPU::chunk_seed_offset_len);
-		cudaMemcpy(GPU::chunk_seed_offset, cmdline::chunk_seed_offset.data(), sizeof(int64_t) * slimechunks_tot,
-				cudaMemcpyDefault) && assertcu;
+		cudaMemcpyToSymbol(GPU::chunk_seed_offset, cmdline::chunk_seed_offset.data(),
+				sizeof(int64_t) * slimechunks_tot, cudaMemcpyHostToDevice) && assertcu;
 	}
 	int blocks, threads;
 	//cudaOccupancyMaxPotentialBlockSize is not defined out of nvcc, no idea why
