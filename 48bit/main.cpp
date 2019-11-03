@@ -1,3 +1,4 @@
+#include <string>
 #include <thread>
 #include <set>
 #include <regex>
@@ -41,28 +42,34 @@ int main(int argc, char** argv) try {
 
 	{
 		using namespace boost::program_options;
-		options_description options("minecrack-slimes");
+		options_description options;
 		options.add_options()
 				("verbose,v", "print extra informations")
 				("base,b", value(&cmdline::base_seed)->default_value(0), "start from this seed")
 				("force,f", "do not bail out if too few chunks are provided");
-		positional_options_description positional;
-		positional.add("slime-chunks", -1);
 		if (argc == 1) {
-			cerr << "Usage: " << argv[0] << " [options] chunk1X:chunk1Z chunk2X:chunk2Z ..." << options;
+			cerr << "Usage: " << argv[0] << " [options] chunk1X:chunk1Z chunk2X:chunk2Z ..." << endl << "Options:"
+			     << endl << options;
 			return 0;
 		}
+		options_description options_with_chunks;
+		options_with_chunks.add(options).add_options()("slime-chunk", value<vector<string>>());
+		positional_options_description positional;
+		positional.add("slime-chunk", -1);
 		variables_map vm;
 		try {
-			store(command_line_parser(argc, argv).options(options).positional(positional).run(), vm);
+			store(command_line_parser(argc, argv).options(options_with_chunks).positional(positional).run(),
+					vm);
 			notify(vm);
 		} catch (const boost::program_options::error& e) { throw invalid_argument(e.what()); }
 		if (cmdline::base_seed >= 1ULL << JavaRandom::generator_bits)
 			throw invalid_argument("argument to -b must be a 48 bits number");
 		cmdline::verbose = vm.count("verbose");
+		auto slimechunks_vector = vm["slime-chunk"].as<vector<string>>();
+		set<string> slimechunks(slimechunks_vector.begin(), slimechunks_vector.end());
 		regex slimechunk_regex("([\\-\\+]?\\d+)\\:([\\-\\+]?\\d+)", regex::ECMAScript | regex::optimize);
 		smatch result;
-		for (auto& chunkspec: vm["slime-chunks"].as<set<string>>()) {
+		for (auto& chunkspec: slimechunks) {
 			if (!regex_match(chunkspec, result, slimechunk_regex))
 				throw invalid_argument("slime chunk coordinate " + chunkspec + " cannot be parsed");
 			try {
