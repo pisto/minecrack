@@ -35,7 +35,7 @@ __global__ void test_seeds(uint64_t seeds_start, uint64_t seeds_end, uint64_t* p
 	uint64_t good_seed = BAD_SEED;
 	uint32_t current_chunk_test = 0;
 	for (uint64_t current_seed = seeds_start; current_seed < seeds_end;) {
-		#pragma unroll 15
+		#pragma unroll 5
 		for (uint8_t i = 0; i < chunk_seed_offset_len; i++) {
 			if (!current_chunk_test)
 				//don't return here to avoid complicated flow control, out of bound results will be filtered later
