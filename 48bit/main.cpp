@@ -147,7 +147,7 @@ int main(int argc, char** argv) try {
 				continue;
 			}
 			if (quit_requested) continue;
-			GPU::launch_test_seeds(blocks, threads, grid.s, cmdline::base_seed, cmdline::base_seed + GPU::BATCH_SIZE, passed_seeds);
+			GPU::launch_test_seeds(blocks, threads, grid.s, cmdline::base_seed, cmdline::base_seed + GPU::BATCH_SIZE, passed_seeds.devptr());
 			grid.c.record(grid.s);
 			cmdline::base_seed += GPU::BATCH_SIZE;
 			if (cmdline::base_seed >= 1ULL << JavaRandom::generator_bits) quit_requested = true;
