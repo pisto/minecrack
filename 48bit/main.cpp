@@ -33,7 +33,7 @@ namespace cmdline {
 
 bool verbose;
 uint64_t base_seed;
-std::vector<int64_t> seed_offsets;
+std::vector<int64_t> chunk_seed_offset;
 
 };
 
@@ -74,7 +74,7 @@ int main(int argc, char** argv) try {
 				throw invalid_argument("slime chunk coordinate " + chunkspec + " cannot be parsed");
 			try {
 				int chunkX = stoi(result[1]), chunkZ = stoi(result[2]);
-				cmdline::seed_offsets.push_back(chunkX * chunkX * 0x4c1906 + chunkX * 0x5ac0db
+				cmdline::chunk_seed_offset.push_back(chunkX * chunkX * 0x4c1906 + chunkX * 0x5ac0db
 				                                + chunkZ * chunkZ * 0x4307a7L + (chunkZ * 0x5f24f ^ 0x3ad8025f));
 			} catch (const out_of_range& o) {
 				throw invalid_argument("slime chunk coordinate " + chunkspec + " cannot is out of int range");
@@ -84,11 +84,11 @@ int main(int argc, char** argv) try {
 		 * each slime chunk gives log2(10) bits of information on the 48bit seed of the world. At least 15 slime
 		 * chunks must be found to have one or just few 48bit candidates.
 		 */
-		if (cmdline::seed_offsets.size() < 13 && !vm.count("force"))
+		if (cmdline::chunk_seed_offset.size() < 13 && !vm.count("force"))
 			throw invalid_argument("Too few slime chunks provided, at least 13 are needed (or use the -f option)");
-		if (cmdline::seed_offsets.size() < 15)
+		if (cmdline::chunk_seed_offset.size() < 15)
 			cerr << "Warning: 15 or more slime chunks should be provided" << endl;
-		if (cmdline::seed_offsets.size() > GPU::MAX_SLIME_CHUNKS)
+		if (cmdline::chunk_seed_offset.size() > GPU::MAX_SLIME_CHUNKS)
 			throw invalid_argument("Too many slime chunks provided, max is " + to_string(GPU::MAX_SLIME_CHUNKS));
 	}
 
@@ -102,9 +102,9 @@ int main(int argc, char** argv) try {
 	}
 
 	{
-		uint8_t slimechunks_tot = cmdline::seed_offsets.size();
-		set_device_object(slimechunks_tot, GPU::seed_offsets_len);
-		cudaMemcpy(GPU::seed_offsets, cmdline::seed_offsets.data(), sizeof(int64_t) * slimechunks_tot,
+		uint8_t slimechunks_tot = cmdline::chunk_seed_offset.size();
+		set_device_object(slimechunks_tot, GPU::chunk_seed_offset_len);
+		cudaMemcpy(GPU::chunk_seed_offset, cmdline::chunk_seed_offset.data(), sizeof(int64_t) * slimechunks_tot,
 				cudaMemcpyDefault) && assertcu;
 	}
 	int blocks, threads;
