@@ -32,8 +32,7 @@ __global__ void test_seeds(uint64_t seeds_start, uint64_t seeds_end, uint64_t* p
 	 * targets_len so that only one good_seed can be generated, otherwise multiple seeds could pass the tests and
 	 * good_seed could be overwritten before flushing the result to output.
 	 */
-	constexpr const uint64_t bad_seed = 1ULL << JavaRandom::generator_bits;
-	uint64_t good_seed = bad_seed;
+	uint64_t good_seed = BAD_SEED;
 	uint32_t current_chunk_test = 0;
 	for (uint64_t current_seed = seeds_start; current_seed < seeds_end;) {
 		#pragma unroll 15
@@ -50,7 +49,7 @@ __global__ void test_seeds(uint64_t seeds_start, uint64_t seeds_end, uint64_t* p
 		}
 		if (good_seed < seeds_end) {
 			passed_seeds[atomicAdd(&passed_buffer_i, 1) & PASSED_BUFF_MASK] = good_seed;
-			good_seed = bad_seed;
+			good_seed = BAD_SEED;
 		}
 	}
 }

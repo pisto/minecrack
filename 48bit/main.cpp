@@ -123,8 +123,7 @@ int main(int argc, char** argv) try {
 	 * uneven amounts of work across SMs should be masked.
 	 */
 	cudalist<uint64_t, true> passed_seeds(GPU::PASSED_BUFF_LEN, false);
-	auto passed_empty_slot = 1ULL << JavaRandom::generator_bits;
-	loopi(GPU::PASSED_BUFF_LEN) passed_seeds[i] = passed_empty_slot;
+	loopi(GPU::PASSED_BUFF_LEN) passed_seeds[i] = GPU::BAD_SEED;
 	struct {
 		cudaStream_t s;
 		completion c;
@@ -137,9 +136,9 @@ int main(int argc, char** argv) try {
 	while (true) {
 		bool grid_runs = false;
 		for (auto& grid: workgrids) {
-			while (passed_seeds_volatile[passed_buffer_i] != passed_empty_slot) {
+			while (passed_seeds_volatile[passed_buffer_i] < GPU::BAD_SEED) {
 				cout << passed_seeds_volatile[passed_buffer_i] << endl;
-				passed_seeds_volatile[passed_buffer_i++] = passed_empty_slot;
+				passed_seeds_volatile[passed_buffer_i++] = GPU::BAD_SEED;
 				passed_buffer_i &= GPU::PASSED_BUFF_MASK;
 			}
 			if (!grid.c.ready()) {

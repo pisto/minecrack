@@ -15,12 +15,14 @@ extern std::vector<int64_t> chunk_seed_offset;
 }
 
 #include "utilities_cuda.cuh"
+#include "JavaRandom.cuh"
 
 namespace GPU {
 
 constexpr const uint8_t MAX_SLIME_CHUNKS = 30;
 constexpr const uint32_t PASSED_BUFF_LEN = 1024, PASSED_BUFF_MASK = PASSED_BUFF_LEN - 1;
 constexpr const uint64_t BATCH_SIZE = 1ULL << 30;
+constexpr const uint64_t BAD_SEED = 1ULL << JavaRandom::generator_bits;
 
 extern __device__ int64_t chunk_seed_offset[MAX_SLIME_CHUNKS];
 extern __constant__ uint8_t chunk_seed_offset_len;
