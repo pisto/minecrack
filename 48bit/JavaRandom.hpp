@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cuda_runtime.h>
 
 /*
  * Smallest unsigned integer that can hold a value.
@@ -33,16 +32,16 @@ struct JavaRandom {
 	static constexpr const int64_t multiplier = 0x5DEECE66DLL, addend = 0xB;
 	static constexpr const int JAVA_RAND_MAX = (1u << 31) - 1;
 
-	template<typename T> __host__ __device__ JavaRandom(T seed): scrambled_seed(seed ^ multiplier) {}
+	template<typename T> JavaRandom(T seed): scrambled_seed(seed ^ multiplier) {}
 
-	__host__ __device__ uint64_t current_seed() const { return scrambled_seed ^ multiplier; }
+	uint64_t current_seed() const { return scrambled_seed ^ multiplier; }
 
-	__host__ __device__ [[gnu::always_inline]] int next(int bits) {
+	int next(int bits) {
 		scrambled_seed = int64_t(scrambled_seed) * multiplier + addend;
 		return scrambled_seed >> (generator_bits - bits);
 	}
 
-	template<uint32_t bound, typename R = typename smallest_uint<bound - 1>::type> __host__ __device__ R nextInt() {
+	template<uint32_t bound, typename R = typename smallest_uint<bound - 1>::type> R nextInt() {
 		int r = next(31);
 		if (!(bound & (bound - 1))) return r & (bound - 1);
 		constexpr const int BAD_RANDOM = JAVA_RAND_MAX - JAVA_RAND_MAX % bound;
