@@ -2,7 +2,26 @@
 
 #include <cstdint>
 #include <cuda_runtime.h>
-#include "utilities.hpp"
+
+/*
+ * Smallest unsigned integer that can hold a value.
+ */
+
+#include <type_traits>
+
+template<uint64_t max, typename = void> struct smallest_uint;
+template<uint64_t max> struct smallest_uint<max, std::enable_if_t<(max < 0x100)>> {
+	using type = uint8_t;
+};
+template<uint64_t max> struct smallest_uint<max, std::enable_if_t<(max >= 0x100 && max < 0x10000)>> {
+	using type = uint16_t;
+};
+template<uint64_t max> struct smallest_uint<max, std::enable_if_t<(max >= 0x10000 && max < 0x100000000ULL)>> {
+	using type = uint32_t;
+};
+template<uint64_t max> struct smallest_uint<max, std::enable_if_t<(max >= 0x100000000ULL)>> {
+	using type = uint64_t;
+};
 
 /*
  * Skeleton C++ implementation of java.util.Random.

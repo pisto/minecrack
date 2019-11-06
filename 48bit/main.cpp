@@ -4,8 +4,8 @@
 #include <set>
 #include <regex>
 #include <iostream>
+#include <algorithm>
 #include <boost/program_options.hpp>
-#include "utilities.hpp"
 #include "utilities_cuda.cuh"
 #include "minecrack-48bit.hpp"
 #include "JavaRandom.cuh"
@@ -35,7 +35,7 @@ bool verbose;
 uint64_t base_seed;
 std::vector<int64_t> chunk_seed_offset;
 
-};
+}
 
 int main(int argc, char** argv) try {
 	for (int s: { SIGINT, SIGTERM }) signal(s, [](int) { quit_requested = true; });
@@ -122,7 +122,7 @@ int main(int argc, char** argv) try {
 	 * uneven amounts of work across SMs should be masked.
 	 */
 	cudalist<uint64_t, true> passed_seeds(GPU::PASSED_BUFF_LEN, false);
-	loopi(GPU::PASSED_BUFF_LEN) passed_seeds[i] = GPU::BAD_SEED;
+	fill_n(*passed_seeds, GPU::PASSED_BUFF_LEN, GPU::BAD_SEED);
 	struct {
 		cudaStream_t s;
 		completion c;

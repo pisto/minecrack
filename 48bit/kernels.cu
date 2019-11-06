@@ -1,5 +1,4 @@
 #include "cub/iterator/cache_modified_input_iterator.cuh"
-#include "utilities.hpp"
 #include "utilities_cuda.cuh"
 #include "JavaRandom.cuh"
 #include "minecrack-48bit.hpp"
