@@ -74,8 +74,7 @@ int main(int argc, char** argv) try {
 				throw invalid_argument("slime chunk coordinate " + chunkspec + " cannot be parsed");
 			try {
 				int chunkX = stoi(result[1]), chunkZ = stoi(result[2]);
-				cmdline::chunk_seed_offset.push_back(chunkX * chunkX * 0x4c1906 + chunkX * 0x5ac0db
-				                                + chunkZ * chunkZ * 0x4307a7L + (chunkZ * 0x5f24f ^ 0x3ad8025f));
+				cmdline::chunk_seed_offset.push_back(slime_seed_offset(chunkX, chunkZ));
 			} catch (const out_of_range& o) {
 				throw invalid_argument("slime chunk coordinate " + chunkspec + " cannot is out of int range");
 			}

@@ -14,6 +14,11 @@ extern std::vector<int64_t> chunk_seed_offset;
 
 }
 
+inline int64_t slime_seed_offset(int chunkX, int chunkZ) {
+	return int64_t(chunkX * chunkX * 4987142) + int64_t(chunkX * 5947611) + int64_t(chunkZ * chunkZ) * int64_t(4392871)
+	       + int64_t(chunkZ * 389711);
+}
+
 #include "utilities_cuda.cuh"
 #include "JavaRandom.cuh"
 
@@ -23,6 +28,10 @@ constexpr const uint8_t MAX_SLIME_CHUNKS = 30;
 constexpr const uint32_t PASSED_BUFF_LEN = 1024, PASSED_BUFF_MASK = PASSED_BUFF_LEN - 1;
 constexpr const uint64_t BATCH_SIZE = 1ULL << 30;
 constexpr const uint64_t BAD_SEED = 1ULL << JavaRandom::generator_bits;
+
+__host__ __device__ inline int64_t mangle_seed(int64_t seed, int64_t offset) {
+	return (seed + offset) ^ int64_t(987234911);
+}
 
 extern __device__ int64_t chunk_seed_offset[MAX_SLIME_CHUNKS];
 extern __constant__ uint8_t chunk_seed_offset_len;

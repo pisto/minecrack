@@ -40,7 +40,7 @@ __global__ void test_seeds(uint64_t seeds_start, uint64_t seeds_end, uint64_t* p
 			if (!current_chunk_test)
 				//don't return here to avoid complicated flow control, out of bound results will be filtered later
 				current_seed = seeds_start++;
-			JavaRandom gen(current_seed + chunk_seed_offset[i]);
+			JavaRandom gen(mangle_seed(current_seed, chunk_seed_offset[o]));
 			if (gen.nextInt<10>()) current_chunk_test = 0;
 			else if (++current_chunk_test == chunk_seed_offset_len) {
 				current_chunk_test = 0;
