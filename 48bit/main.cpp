@@ -1,9 +1,9 @@
+#include <csignal>
 #include <string>
 #include <thread>
 #include <set>
 #include <regex>
 #include <iostream>
-#include <csignal>
 #include <boost/program_options.hpp>
 #include "utilities.hpp"
 #include "utilities_cuda.cuh"
