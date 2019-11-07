@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <vector>
-#include <csignal>
 
 namespace cmdline {
 
