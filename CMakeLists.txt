@@ -14,7 +14,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
 endif()
 
 add_executable(minecrack-slime slime/main.cpp slime/slime_logic.cpp)
-target_link_libraries(minecrack-slime Boost::program_options)
+target_link_libraries(minecrack-slime Boost::program_options -static)
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(minecrack-slime OpenMP::OpenMP_CXX)
