@@ -4,8 +4,6 @@
 
 using namespace std;
 
-namespace CPU {
-
 vector<uint32_t> lowbits_candidates() {
 	vector<uint32_t> ret;
 	for (uint32_t lowbits = 0; lowbits < 1 << LOW_SEED_BITS; lowbits++)
@@ -37,7 +35,5 @@ vector<uint64_t> test_seeds(const vector<uint32_t>& lowbits_candidates) {
 				ret.push_back(seed);
 		}
 	return ret;
-
-}
 
 }

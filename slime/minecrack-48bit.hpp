@@ -21,9 +21,5 @@ inline int64_t mangle_seed(int64_t seed, int64_t offset) {
 	return (seed + offset) ^ int64_t(987234911);
 }
 
-namespace CPU {
-
 std::vector<uint32_t> lowbits_candidates();
 std::vector<uint64_t> test_seeds(const std::vector<uint32_t>& lowbits_candidates);
-
-}
