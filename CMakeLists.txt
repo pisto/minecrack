@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.9)
 project(minecrack LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(cubiomes)
+include_directories(cubiomes)
+
 set(Boost_USE_STATIC_LIBS ON)
 add_definitions(-DBOOST_ENABLE_ASSERT_HANDLER)
 find_package(Boost REQUIRED program_options)
