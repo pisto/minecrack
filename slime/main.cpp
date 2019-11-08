@@ -54,6 +54,8 @@ int main(int argc, char** argv) try {
 			notify(vm);
 		} catch (const boost::program_options::error& e) { throw invalid_argument(e.what()); }
 		cmdline::verbose = vm.count("verbose");
+		if (!vm.count("slime-chunk"))
+			throw invalid_argument("You must specify some slime chunks");
 		auto slimechunks_vector = vm["slime-chunk"].as<vector<string>>();
 		set<string> slimechunks(slimechunks_vector.begin(), slimechunks_vector.end());
 		regex slimechunk_regex("([\\-\\+]?\\d+)\\:([\\-\\+]?\\d+)", regex::ECMAScript | regex::optimize);
@@ -72,8 +74,6 @@ int main(int argc, char** argv) try {
 		 * each slime chunk gives log2(10) bits of information on the 48bit seed of the world. At least 15 slime
 		 * chunks must be found to have one or just few 48bit candidates.
 		 */
-		if (cmdline::chunk_seed_offset.empty())
-			throw invalid_argument("You must specify the coordinates of some slime chunks");
 		if (cmdline::chunk_seed_offset.size() < 13 && !vm.count("force"))
 			throw invalid_argument("Too few slime chunks provided, at least 13 are needed (or use the -f option)");
 		if (cmdline::chunk_seed_offset.size() < 15)
