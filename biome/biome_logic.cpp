@@ -1,7 +1,6 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include "minecrack-16bit.hpp"
 
 using namespace std;
@@ -67,10 +66,8 @@ unordered_map<BiomeID, uint64_t> statistics(uint32_t seeds, uint32_t samples_per
 		for (uint32_t seed = 0; seed < seeds; seed++) {
 			checker.setseed(seed);
 			int position = -1000 * int(samples_per_seed / 2);
-			for (auto sample = samples_per_seed; sample; sample--, position += 1000) {
-				auto biome = checker.getBiomeAt(position, position);
-				hits[biome]++;
-			}
+			for (auto sample = samples_per_seed; sample; sample--, position += 1000)
+				hits[checker.getBiomeAt(position, position)]++;
 		}
 		openmp(omp critical)
 		for (auto& s: hits) ret[s.first] += s.second;

@@ -37,7 +37,7 @@ Biome biomes[256];
 
 namespace {
 
-map<BiomeID, string> biomeID2name = {
+const map<BiomeID, string> biomeID2name = {
 #define biomeID2name(x) { x, #x }
 		biomeID2name(ocean),
 		biomeID2name(plains),
@@ -310,7 +310,7 @@ int main(int argc, char** argv) try {
 		vector<tuple<uint64_t, BiomeID, string>> ranking;
 		double total = 0;
 		for (auto& s: ::statistics(0x10000, 20)) {
-			ranking.emplace_back(s.second, s.first, biomeID2name[s.first]);
+			ranking.emplace_back(s.second, s.first, biomeID2name.at(s.first));
 			total += s.second;
 		}
 		sort(ranking.begin(), ranking.end());
