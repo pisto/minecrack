@@ -315,7 +315,7 @@ int main(int argc, char** argv) try {
 		}
 		sort(ranking.begin(), ranking.end());
 		cout << fixed << setprecision(10);
-		for (auto it = ranking.rbegin(); it != ranking.rend(); it++)
+		for (auto it = ranking.begin(); it != ranking.end(); it++)
 			cout << get<uint64_t>(*it) / total << ',' << int(get<BiomeID>(*it)) << ',' << get<string>(*it)
 			     << endl;
 		return 0;
