@@ -28,7 +28,7 @@ void assertion_failed_msg(const char* expr, const char* msg, const char* functio
 namespace cmdline {
 bool verbose;
 MCversion mcversion;
-set<biome_position> biome_positions;
+vector<biome_position> biome_positions;
 }
 
 extern "C" {
@@ -238,6 +238,75 @@ const map<string, BiomeID> name2biomeID = {
 #undef  name2biomeID
 };
 
+const map<BiomeID, double> probability = {
+		{ modified_jungle_edge,             4.5776e-6 },
+		{ modified_badlands_plateau,        0.0000648499 },
+		{ modified_wooded_badlands_plateau, 0.0001373291 },
+		{ mushroom_field_shore,             0.0002296448 },
+		{ eroded_badlands,                  0.0002632141 },
+		{ mushroom_fields,                  0.0002738953 },
+		{ bamboo_jungle_hills,              0.0002746582 },
+		{ snowy_taiga_mountains,            0.0003128052 },
+		{ giant_spruce_taiga_hills,         0.0003707886 },
+		{ giant_spruce_taiga,               0.0004119873 },
+		{ modified_jungle,                  0.0004974365 },
+		{ jungle_edge,                      0.0007583618 },
+		{ bamboo_jungle,                    0.0007781982 },
+		{ tall_birch_hills,                 0.0008918762 },
+		{ shattered_savanna_plateau,        0.0009040833 },
+		{ swamp_hills,                      0.0010818481 },
+		{ dark_forest_hills,                0.0011436462 },
+		{ tall_birch_forest,                0.0011688232 },
+		{ badlands_plateau,                 0.0011871338 },
+		{ shattered_savanna,                0.0012084961 },
+		{ ice_spikes,                       0.0012680054 },
+		{ frozen_river,                     0.0014671326 },
+		{ snowy_taiga_hills,                0.0017082214 },
+		{ taiga_mountains,                  0.0018669128 },
+		{ modified_gravelly_mountains,      0.0020050049 },
+		{ desert_lakes,                     0.0020309448 },
+		{ snowy_beach,                      0.0023468018 },
+		{ wooded_badlands_plateau,          0.0027374268 },
+		{ gravelly_mountains,               0.0029457092 },
+		{ giant_tree_taiga_hills,           0.0033340454 },
+		{ jungle_hills,                     0.0036964417 },
+		{ stone_shore,                      0.0042602539 },
+		{ badlands,                         0.0043487549 },
+		{ flower_forest,                    0.0045021057 },
+		{ sunflower_plains,                 0.0054008484 },
+		{ frozen_ocean,                     0.0055770874 },
+		{ savanna_plateau,                  0.0067504883 },
+		{ birch_forest_hills,               0.0068023682 },
+		{ snowy_taiga,                      0.0071723938 },
+		{ giant_tree_taiga,                 0.0076217651 },
+		{ deep_frozen_ocean,                0.0079841614 },
+		{ snowy_mountains,                  0.0086425781 },
+		{ taiga_hills,                      0.0091415405 },
+		{ jungle,                           0.0103004456 },
+		{ desert_hills,                     0.012223053 },
+		{ warm_ocean,                       0.0135391235 },
+		{ wooded_mountains,                 0.0147125244 },
+		{ wooded_hills,                     0.0214996338 },
+		{ dark_forest,                      0.0238525391 },
+		{ birch_forest,                     0.0239944458 },
+		{ savanna,                          0.0267868042 },
+		{ deep_lukewarm_ocean,              0.0270385742 },
+		{ deep_cold_ocean,                  0.0271568298 },
+		{ snowy_tundra,                     0.0271652222 },
+		{ beach,                            0.0311912537 },
+		{ swamp,                            0.0333244324 },
+		{ lukewarm_ocean,                   0.0361045837 },
+		{ cold_ocean,                       0.0361434937 },
+		{ river,                            0.0367095947 },
+		{ taiga,                            0.0411720276 },
+		{ desert,                           0.0451049805 },
+		{ mountains,                        0.0640907288 },
+		{ deep_ocean,                       0.0818778992 },
+		{ forest,                           0.0823188782 },
+		{ ocean,                            0.0823387146 },
+		{ plains,                           0.0857795715 }
+};
+
 const map<string, MCversion> mcversions = {
 		{ "1.7",  MC_1_7 },
 		{ "1.8",  MC_1_8 },
@@ -305,8 +374,12 @@ int main(int argc, char** argv) try {
 				catch (const out_of_range& o) {
 					throw invalid_argument("biome name " + string(result[3]) + " is not valid");
 				}
-				cmdline::biome_positions.insert({ coordX, coordZ, biome });
+				cmdline::biome_positions.push_back({ coordX, coordZ, biome });
 			}
+			sort(cmdline::biome_positions.begin(), cmdline::biome_positions.end(),
+					[](const biome_position& a, const biome_position& b){
+						return probability.at(a.biome) < probability.at(b.biome);
+					});
 		}
 	}
 

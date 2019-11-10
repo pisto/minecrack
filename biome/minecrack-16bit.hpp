@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <set>
 #include <vector>
 #include <tuple>
 #include <unordered_map>
@@ -22,7 +21,7 @@ struct biome_position {
 namespace cmdline {
 extern bool verbose;
 extern MCversion mcversion;
-extern std::set<biome_position> biome_positions;
+extern std::vector<biome_position> biome_positions;
 }
 
 constexpr const uint8_t LOW_SEED_BITS = 48;
