@@ -322,12 +322,11 @@ int main(int argc, char** argv) try {
 	}
 
 	uint64_t lower;
-	cin.exceptions(ios::badbit | ios::failbit);
-	while (!cin.eof() && cin >> lower) {
-		if (lower > 1ull << 48) throw invalid_argument("Invalid input " + to_string(lower));
+	while (cin >> lower) {
+		if (lower >> 48) throw invalid_argument("Invalid input " + to_string(lower));
 		auto seeds = check_biomes(lower);
 		sort(seeds.begin(), seeds.end());
-		for (auto s: seeds) cout << s;
+		for (auto s: seeds) cout << s << endl;
 	}
 
 } catch (const invalid_argument& e) {
