@@ -116,8 +116,12 @@ const map<BiomeID, string> biomeID2name = {
 #undef  biomeID2name
 };
 
+string lowercase(string s) {
+	transform(s.begin(), s.end(), s.begin(), [](unsigned char c){ return tolower(c); });
+	return s;
+}
 const map<string, BiomeID> name2biomeID = {
-#define name2biomeID(x) { #x, x }
+#define name2biomeID(x) { lowercase(#x), x }
 		name2biomeID(ocean),
 		name2biomeID(plains),
 		name2biomeID(desert),
@@ -285,7 +289,8 @@ int main(int argc, char** argv) try {
 			if (!do_statistics) throw invalid_argument("You must specify some biome coordinates");
 		} else {
 			auto biomes = vm["biome"].as<vector<string>>();
-			regex biome_regex("([\\-\\+]?\\d+)\\:([\\-\\+]?\\d+):([a-z_]+)", regex::ECMAScript | regex::optimize);
+			regex biome_regex("([\\-\\+]?\\d+)\\:([\\-\\+]?\\d+):([a-zA-Z_]+)",
+					regex::ECMAScript | regex::icase | regex::optimize);
 			smatch result;
 			for (auto& chunkspec: biomes) {
 				if (!regex_match(chunkspec, result, biome_regex))
@@ -296,7 +301,7 @@ int main(int argc, char** argv) try {
 				catch (const out_of_range& o) {
 					throw invalid_argument("biome coordinate " + chunkspec + " cannot is out of int range");
 				}
-				try { biome = name2biomeID.at(result[3]); }
+				try { biome = name2biomeID.at(lowercase(result[3])); }
 				catch (const out_of_range& o) {
 					throw invalid_argument("biome name " + string(result[3]) + " is not valid");
 				}
