@@ -45,7 +45,7 @@ vector<int64_t> check_biomes(uint64_t lowbits) {
 		for (uint32_t highbits = 0; highbits < 0x10000; highbits++) {
 			int64_t seed = (int64_t(highbits) << LOW_SEED_BITS) | lowbits;
 			checker.setseed(seed);
-			if (all_of(cmdline::biome_positions.begin(), cmdline::biome_positions.begin(),
+			if (all_of(cmdline::biome_positions.begin(), cmdline::biome_positions.end(),
 					[seed,&checker](const biome_position& test) {
 						return checker.getBiomeAt(test.x, test.z) == test.biome; }))
 				hits.push_back(seed);
