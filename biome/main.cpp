@@ -239,15 +239,15 @@ const map<string, BiomeID> name2biomeID = {
 };
 
 const map<string, MCversion> mcversions = {
-		{ "1.7", MC_1_7 },
-		{ "1.8", MC_1_8 },
-		{ "1.9", MC_1_9 },
+		{ "1.7",  MC_1_7 },
+		{ "1.8",  MC_1_8 },
+		{ "1.9",  MC_1_9 },
 		{ "1.10", MC_1_10 },
 		{ "1.11", MC_1_11 },
 		{ "1.12", MC_1_12 },
 		{ "1.13", MC_1_13 },
 		{ "1.14", MC_1_14 },
-		{ "BE", MCBE }
+		{ "BE",   MCBE }
 };
 }
 
