@@ -14,11 +14,14 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -368,13 +371,23 @@ public class BiomeSeedTest {
         System.err.println("Loading complete");
 
         ThreadPoolExecutor threadpool = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
-        Scanner cin = new Scanner(System.in);
-        while (cin.hasNextLine()) {
-            long lowbits = Long.parseLong(cin.nextLine());
+        BufferedReader cin = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            String input;
+            try {
+                if ((input = cin.readLine()) == null) break;
+            } catch (IOException e) { break; }
+            long lowbits = Long.parseLong(input);
             if ((lowbits >>> 48) != 0) throw new IllegalArgumentException("Invalid input " + lowbits);
             AtomicInteger highbits = new AtomicInteger(0);
             for (MinecraftInterface mcintf: interfaces)
                 threadpool.execute(new SeedTester(mcintf, lowbits, highbits));
+        }
+        threadpool.shutdown();
+        while (true) {
+            try {
+                if (threadpool.awaitTermination(1, TimeUnit.DAYS)) break;
+            } catch (InterruptedException e) {}
         }
     }
 }
