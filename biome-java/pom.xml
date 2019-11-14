@@ -7,6 +7,19 @@
     <groupId>com.pisto.minecrack</groupId>
     <artifactId>minecrack-biome-java</artifactId>
     <version>0.1</version>
+    <profiles>
+        <profile>
+            <id>builddir</id>
+            <activation>
+                <property>
+                    <name>builddir</name>
+                </property>
+            </activation>
+            <build>
+                <directory>${builddir}</directory>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
