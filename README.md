@@ -52,7 +52,7 @@ minecraft-biome -m 1.14 -- -212:-8:mushroom_fields 1044:-776:mountains -1208:-10
 The Minecraft version is specified with `-m <version>`. Only use the major version number (e.g. 1.14 even if the server runs 1.14.4). The supported versions are from `1.7` through `1.14`, and `BE` for the Bedrock Edition.
 
 
-## `minecrack-biome`
+## `minecrack-biome-java`
 
 First make sure that you have the desired specific version of Minecraft installed. You can do so by creating a new Minecraft profile in the Minecraft launcher, and start the game once. Then, format the biome samplings just as for `minecrack-biome`, and invoke `minecrack-biome-java.jar`:
 
