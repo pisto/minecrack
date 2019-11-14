@@ -334,6 +334,9 @@ public class BiomeSeedTest {
                     nolog = true;
                 }
                 interfaces[t] = MinecraftInterfaces.fromLocalProfile(inst.newLauncherProfile(version));
+                //probe the interface to fail early
+                interfaces[t].createWorld(1234, WorldType.DEFAULT, "");
+                interfaces[t].getBiomeData(1, 2, 3, 4, false);
             }
             nolog = false;
         } catch (DotMinecraftDirectoryNotFoundException e) {
@@ -348,7 +351,11 @@ public class BiomeSeedTest {
         } catch (MinecraftInterfaceCreationException e) {
             System.err.println("Cannot load Minecraft: " + e.getLocalizedMessage());
             System.exit(1);
+        } catch (MinecraftInterfaceException e) {
+            System.err.println("Cannot execute Minecraft: " + e.getLocalizedMessage());
+            System.exit(1);
         }
+        AmidstLogger.info("Loading complete");
 
         ThreadPoolExecutor threadpool = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
         Scanner cin = new Scanner(System.in);
