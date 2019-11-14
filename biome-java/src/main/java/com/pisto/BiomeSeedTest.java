@@ -325,6 +325,7 @@ public class BiomeSeedTest {
             System.exit(1);
         }
 
+        System.err.println("Loading Minecraft");
         int threads = Runtime.getRuntime().availableProcessors();
         MinecraftInterface[] interfaces = new MinecraftInterface[threads];
         try {
@@ -362,7 +363,7 @@ public class BiomeSeedTest {
             latest.delete();
             logs.delete();
         } catch (Throwable t) {}
-        AmidstLogger.info("Loading complete");
+        System.err.println("Loading complete");
 
         ThreadPoolExecutor threadpool = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
         Scanner cin = new Scanner(System.in);
