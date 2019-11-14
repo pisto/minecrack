@@ -3,6 +3,7 @@ project(minecrack LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(cubiomes)
+add_subdirectory(biome-java)
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
     find_package(OpenMP)
