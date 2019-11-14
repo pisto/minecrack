@@ -14,6 +14,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -355,6 +356,12 @@ public class BiomeSeedTest {
             System.err.println("Cannot execute Minecraft: " + e.getLocalizedMessage());
             System.exit(1);
         }
+        try {
+            // logs/latest.log is touched by Minecraft code and it is useless in this context
+            File logs = new File("logs"), latest = new File(logs, "latest.log");
+            latest.delete();
+            logs.delete();
+        } catch (Throwable t) {}
         AmidstLogger.info("Loading complete");
 
         ThreadPoolExecutor threadpool = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
