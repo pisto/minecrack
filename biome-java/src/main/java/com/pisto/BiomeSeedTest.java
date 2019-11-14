@@ -296,7 +296,7 @@ public class BiomeSeedTest {
             System.err.println("Bad argument: " + e.getLocalizedMessage());
             System.exit(1);
         }
-        String installation_path = cmdline.getOptionValue('p', "~/.minecraft");
+        String installation_path = cmdline.getOptionValue('p');
         String version = cmdline.getOptionValue('m');
         AmidstLogger.removeListener("master");
         AmidstLogger.removeListener("console");
@@ -342,7 +342,9 @@ public class BiomeSeedTest {
             }
             nolog = false;
         } catch (DotMinecraftDirectoryNotFoundException e) {
-            System.err.println("Could not find minecraft installation at " + installation_path);
+            System.err.println(installation_path != null ?
+                    "Could not find minecraft installation at " + installation_path :
+                    "Could not find a minecraft installation at the default path");
             System.exit(1);
         } catch (FormatException e) {
             System.err.println("Invalid version " + version);
