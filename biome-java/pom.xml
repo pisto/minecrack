@@ -8,6 +8,7 @@
     <artifactId>minecrack-biome-java</artifactId>
     <version>0.1</version>
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
