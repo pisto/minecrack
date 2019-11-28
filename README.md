@@ -2,7 +2,7 @@
 
 minecrack can recover the full 64 bits seed of a Minecraft map from some of the map features.
 
-minecrack is the first program to crack Minecraft seeds that recovers the full 64 bits seed without relying on assumptions on how the seed was generated. As long as the data you provide is correct and sufficient, any seed can be retrieved. The program is fully multithreaded.
+minecrack is the first program to crack Minecraft seeds that recovers the full 64 bits seed without relying on assumptions on how the seed was generated. Almost all seeds can be retrieved (see [limitations](#technical-details)). The program is fully multithreaded.
 
 With the current implementation, the seed is recovered in two steps:
 
@@ -31,7 +31,7 @@ make
 
 # Crack a seed
 
-First collect around 18 slime chunk coordinates (chunk coordinates are world coordinates divided by 16 and rounded towards 0, the coordinates can be obtained from the debug screen). Then invoke `minecrack-slime` and append the chunk coordinates in `X:Z` format:
+First collect 15 or more slime chunk coordinates (chunk coordinates are world coordinates divided by 16 and rounded towards 0, the coordinates can be obtained from the debug screen). Then invoke `minecrack-slime` and append the chunk coordinates in `X:Z` format:
 
 ```
 minecrack-slime -- 0:-96 0:-93 0:-77 0:-74 0:-73 0:-64 0:-55 0:-51 0:-50 0:-49 0:-46 0:-25 0:-4 0:11 0:30 0:37 0:44 > 48bit
@@ -39,11 +39,11 @@ minecrack-slime -- 0:-96 0:-93 0:-77 0:-74 0:-73 0:-64 0:-55 0:-51 0:-50 0:-49 0
 
 The output file `48bit` will contain all possible 48 bits map seeds that can generate the specified slime chunks.
 
-These results are then passed to either `minecrack-biome` or `minecrack-biome-java.jar`, which output the final candidate seed(s). In both cases you need to provide a number of biome "samplings": just walk around in the map and every 100 blocks or so write down the block coordinate and the biome name, as shown in the debug screen. Then, invoke one of the two implementations.
+These results are then passed to either `minecrack-biome` or `minecrack-biome-java.jar`, which output the final candidate seed(s). In both cases you need to provide a number of biome samples: just walk around in the map and every 100 blocks or so write down the block coordinate and the biome name, as shown in the debug screen. Then, invoke one of the two implementations.
 
 ## `minecrack-biome`
 
-Format the biome samplings as `X:Z:biome_name`, and append them to the invokation:
+Format the biome samples as `X:Z:biome_name`, and append them to the invokation:
 
 ```
 minecrack-biome -m 1.14 -- -212:-8:mushroom_fields 1044:-776:mountains -1208:-1004:swamp -2408:-796:desert_hills -5622:-1596:river -4608:4267:frozen_ocean < 48bit
@@ -54,7 +54,7 @@ The Minecraft version is specified with `-m <version>`. Only use the major versi
 
 ## `minecrack-biome-java`
 
-First make sure that you have the desired specific version of Minecraft installed. You can do so by creating a new Minecraft profile in the Minecraft launcher, and start the game once. Then, format the biome samplings just as for `minecrack-biome`, and invoke `minecrack-biome-java.jar`:
+First make sure that you have the desired specific version of Minecraft installed. You can do so by creating a new Minecraft profile in the Minecraft launcher, and start the game once. Then, format the biome samples just as for `minecrack-biome`, and invoke `minecrack-biome-java.jar`:
 
 ```
 java -jar minecrack-biome-java.jar -m 1.14.4 -- -212:-8:mushroom_fields 1044:-776:mountains -1208:-1004:swamp -2408:-796:desert_hills -5622:-1596:river -4608:4267:frozen_ocean < 48bit
